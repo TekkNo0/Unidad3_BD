@@ -1,0 +1,60 @@
+                                                                         QUERY PLAN                                                                          
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=8081.22..8083.09 rows=16 width=76) (actual time=143.506..147.405 rows=20 loops=1)
+   Output: p.id, p.fecha, pr.nombre, d.cantidad, (((d.cantidad)::numeric * d.precio_unitario))
+   Buffers: shared hit=963 read=3055 dirtied=14 written=811
+   ->  Gather Merge  (cost=8081.22..8083.09 rows=16 width=76) (actual time=143.500..147.397 rows=20 loops=1)
+         Output: p.id, p.fecha, pr.nombre, d.cantidad, (((d.cantidad)::numeric * d.precio_unitario))
+         Workers Planned: 2
+         Workers Launched: 2
+         Buffers: shared hit=963 read=3055 dirtied=14 written=811
+         ->  Sort  (cost=7081.20..7081.22 rows=8 width=76) (actual time=19.326..19.330 rows=7 loops=3)
+               Output: p.id, p.fecha, pr.nombre, d.cantidad, (((d.cantidad)::numeric * d.precio_unitario))
+               Sort Key: p.fecha DESC
+               Sort Method: quicksort  Memory: 27kB
+               Buffers: shared hit=963 read=3055 dirtied=14 written=811
+               Worker 0:  actual time=0.038..0.039 rows=0 loops=1
+                 Sort Method: quicksort  Memory: 25kB
+                 Buffers: shared hit=8
+               Worker 1:  actual time=7.938..7.941 rows=2 loops=1
+                 Sort Method: quicksort  Memory: 25kB
+                 Buffers: shared hit=245 read=242 dirtied=1 written=242
+               ->  Nested Loop  (cost=0.71..7081.08 rows=8 width=76) (actual time=1.310..19.279 rows=7 loops=3)
+                     Output: p.id, p.fecha, pr.nombre, d.cantidad, ((d.cantidad)::numeric * d.precio_unitario)
+                     Buffers: shared hit=947 read=3055 dirtied=14 written=811
+                     Worker 0:  actual time=0.003..0.003 rows=0 loops=1
+                     Worker 1:  actual time=3.468..7.901 rows=2 loops=1
+                       Buffers: shared hit=237 read=242 dirtied=1 written=242
+                     ->  Nested Loop  (cost=0.42..7014.50 rows=8 width=26) (actual time=1.173..19.079 rows=7 loops=3)
+                           Output: d.cantidad, d.precio_unitario, d.producto_id, p.id, p.fecha
+                           Inner Unique: true
+                           Buffers: shared hit=889 read=3052 dirtied=14 written=811
+                           Worker 0:  actual time=0.002..0.002 rows=0 loops=1
+                           Worker 1:  actual time=3.442..7.868 rows=2 loops=1
+                             Buffers: shared hit=230 read=242 dirtied=1 written=242
+                           ->  Parallel Seq Scan on public.detalle_pedido d  (cost=0.00..6947.00 rows=8 width=18) (actual time=0.980..18.569 rows=7 loops=3)
+                                 Output: d.id, d.pedido_id, d.producto_id, d.cantidad, d.precio_unitario
+                                 Filter: (d.producto_id = 100)
+                                 Rows Removed by Filter: 199993
+                                 Buffers: shared hit=791 read=3031 written=805
+                                 Worker 0:  actual time=0.001..0.001 rows=0 loops=1
+                                 Worker 1:  actual time=2.888..7.207 rows=2 loops=1
+                                   Buffers: shared hit=220 read=240 written=240
+                           ->  Index Scan using pedido_pkey on public.pedido p  (cost=0.42..8.44 rows=1 width=12) (actual time=0.067..0.067 rows=1 loops=20)
+                                 Output: p.id, p.usuario_id, p.fecha, p.total, p.estado, p.eliminado
+                                 Index Cond: (p.id = d.pedido_id)
+                                 Buffers: shared hit=80 read=21 written=6
+                                 Worker 1:  actual time=0.325..0.326 rows=1 loops=2
+                                   Buffers: shared hit=9 read=2 written=2
+                     ->  Index Scan using producto_pkey on public.producto pr  (cost=0.29..8.31 rows=1 width=32) (actual time=0.024..0.025 rows=1 loops=20)
+                           Output: pr.id, pr.nombre, pr.precio, pr.categoria_id, pr.activo
+                           Index Cond: (pr.id = 100)
+                           Buffers: shared hit=58 read=3
+                           Worker 1:  actual time=0.013..0.013 rows=1 loops=2
+                             Buffers: shared hit=7
+ Planning:
+   Buffers: shared hit=255 read=7 dirtied=1
+ Planning Time: 5.759 ms
+ Execution Time: 147.547 ms
+(56 filas)
+

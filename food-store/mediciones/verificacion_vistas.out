@@ -1,0 +1,40 @@
+        ?column?        | count 
+------------------------+-------
+ v1 vista EXCEPT manual |     0
+(1 fila)
+
+        ?column?        | count 
+------------------------+-------
+ v1 manual EXCEPT vista |     0
+(1 fila)
+
+        ?column?        | count 
+------------------------+-------
+ v2 vista EXCEPT manual |     0
+(1 fila)
+
+        ?column?        | count 
+------------------------+-------
+ v2 manual EXCEPT vista |     0
+(1 fila)
+
+        ?column?        | count 
+------------------------+-------
+ v3 vista EXCEPT manual |     0
+(1 fila)
+
+        ?column?        | count 
+------------------------+-------
+ v3 manual EXCEPT vista |     0
+(1 fila)
+
+        ?column?        | count 
+------------------------+-------
+ v4 vista EXCEPT manual |     0
+(1 fila)
+
+        ?column?        | count 
+------------------------+-------
+ v4 manual EXCEPT vista |     0
+(1 fila)
+

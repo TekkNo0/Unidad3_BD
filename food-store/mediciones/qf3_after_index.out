@@ -1,0 +1,16 @@
+                                                              QUERY PLAN                                                              
+--------------------------------------------------------------------------------------------------------------------------------------
+ Bitmap Heap Scan on public.producto  (cost=80.34..586.57 rows=500 width=38) (actual time=0.604..2.516 rows=990 loops=1)
+   Output: id, nombre, precio
+   Recheck Cond: ((producto.nombre ~~* '%Bebidas%500ml%'::text) AND producto.activo)
+   Heap Blocks: exact=481
+   Buffers: shared hit=507
+   ->  Bitmap Index Scan on idx_producto_nombre_trgm  (cost=0.00..80.21 rows=500 width=0) (actual time=0.549..0.549 rows=990 loops=1)
+         Index Cond: (producto.nombre ~~* '%Bebidas%500ml%'::text)
+         Buffers: shared hit=26
+ Planning:
+   Buffers: shared hit=131
+ Planning Time: 5.585 ms
+ Execution Time: 2.958 ms
+(12 filas)
+

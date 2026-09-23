@@ -1,0 +1,13 @@
+                                                    QUERY PLAN                                                    
+------------------------------------------------------------------------------------------------------------------
+ Seq Scan on public.producto  (cost=0.00..1106.00 rows=500 width=38) (actual time=0.048..35.946 rows=990 loops=1)
+   Output: id, nombre, precio
+   Filter: (producto.activo AND (producto.nombre ~~* '%Bebidas%500ml%'::text))
+   Rows Removed by Filter: 49010
+   Buffers: shared hit=481
+ Planning:
+   Buffers: shared hit=101
+ Planning Time: 2.118 ms
+ Execution Time: 36.064 ms
+(9 filas)
+

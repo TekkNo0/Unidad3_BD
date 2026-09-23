@@ -1,0 +1,21 @@
+                                                                                                                QUERY PLAN                                                                                                                 
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Sort  (cost=3811.42..3823.12 rows=4682 width=20) (actual time=5.637..5.938 rows=4770 loops=1)
+   Output: id, fecha, total
+   Sort Key: pedido.fecha
+   Sort Method: quicksort  Memory: 402kB
+   Buffers: shared hit=1574 read=11
+   ->  Bitmap Heap Scan on public.pedido  (cost=154.50..3525.98 rows=4682 width=20) (actual time=0.456..4.992 rows=4770 loops=1)
+         Output: id, fecha, total
+         Recheck Cond: ((pedido.fecha >= '2025-02-28 21:00:00-03'::timestamp with time zone) AND (pedido.fecha <= '2025-03-31 20:59:59-03'::timestamp with time zone) AND (pedido.estado = 'CONFIRMADO'::text) AND (NOT pedido.eliminado))
+         Heap Blocks: exact=1571
+         Buffers: shared hit=1571 read=11
+         ->  Bitmap Index Scan on idx_pedido_fecha_estado_vig  (cost=0.00..153.33 rows=4682 width=0) (actual time=0.331..0.331 rows=4770 loops=1)
+               Index Cond: ((pedido.fecha >= '2025-02-28 21:00:00-03'::timestamp with time zone) AND (pedido.fecha <= '2025-03-31 20:59:59-03'::timestamp with time zone) AND (pedido.estado = 'CONFIRMADO'::text))
+               Buffers: shared read=11
+ Planning:
+   Buffers: shared hit=138 read=1
+ Planning Time: 4.021 ms
+ Execution Time: 6.161 ms
+(17 filas)
+
